@@ -15,12 +15,17 @@ Route::group(['middleware' => 'web'], function () {
     ////////////////////////////////////////////////////////
 
     Route::get('news/list', ['as' => 'news', 'uses' => 'NewsController@index']);
+    Route::get('comments/list', ['as' => 'news', 'uses' => 'CommentsController@index']);
     Route::get('news/add', ['as' => 'news', 'uses' => 'NewsController@addNews']);
     Route::post('news/add', ['as' => 'news', 'uses' => 'NewsController@submitNews']);
     Route::get('news/view/{id}', ['as' => 'news', 'uses' => 'NewsController@viewNews']);
     Route::get('news/edit/{id}', ['as' => 'news', 'uses' => 'NewsController@editNews']);
     Route::post('news/edit/{id}', ['as' => 'news', 'uses' => 'NewsController@editNewsSubmit']);
     Route::get('news/remove/{id}', ['as' => 'news', 'uses' => 'NewsController@removeNews']);
+    Route::get('comments/remove/{id}/{flag}', ['as' => 'news', 'uses' => 'CommentsController@removeComment']);
+    Route::get('categories/list', ['as' => 'news', 'uses' => 'CategoriesController@index']);
+    Route::get('categories/add', ['as' => 'news', 'uses' => 'CategoriesController@addCategories']);
+    Route::post('categories/add', ['as' => 'news', 'uses' => 'CategoriesController@submitCategories']);
 
     ////////////////////////////////////////////////////////
 

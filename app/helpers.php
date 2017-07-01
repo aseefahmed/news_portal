@@ -196,3 +196,19 @@ function findUserDetails($user_id)
 {
 	return DB::table('users')->where('id', $user_id)->get();
 }
+function findUserCategories($id)
+{
+	return DB::table('permission_users')->join('cms_categories', 'cms_categories.id', '=', 'permission_users.category_id')->where('user_id', $id)->get();
+}
+function findMyCategories($id)
+{
+	if(Auth::user()->role ==1)
+	{
+		return DB::table('permission_users')->join('cms_categories', 'cms_categories.id', '=', 'permission_users.category_id')->select('cms_categories.*')->get();
+	}
+	else 
+	{
+		return DB::table('permission_users')->join('cms_categories', 'cms_categories.id', '=', 'permission_users.category_id')->where('user_id', $id)->select('cms_categories.*')->get();
+	}
+	
+}

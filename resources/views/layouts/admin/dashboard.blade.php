@@ -6,26 +6,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>NRB Express</title>
+    <title>Dashboard | Bangladesh Times</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="apple-touch-icon" sizes="120x120" href="favicon/apple-icon-120x120.png">
     <link rel="icon" type="image/png" sizes="192x192" href="favicon/android-icon-192x192.png">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
     <link href="{{ asset('public/css/all.css') }}" rel="stylesheet" type="text/css"/>
-    <link href="{{ asset('public/css/datetimepicker.css') }}" rel="stylesheet" type="text/css">
-    <link href="{{ asset('public/plugins/bootstrap-fileinput/css/fileinput.css') }}" rel="stylesheet" type="text/css">
-    {{--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">--}}
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+    <!--<link href="{{ asset('public/css/datetimepicker.css') }}" rel="stylesheet" type="text/css">-->
     <link href="{{ asset('public/css/toaster.min.css') }}" rel="stylesheet" type="text/css"/>
 	 <!-- Include external CSS. -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/codemirror.min.css">
+    
  
     <!-- Include Editor style. -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.6.0/css/froala_editor.pkgd.min.css" rel="stylesheet" type="text/css" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.6.0/css/froala_style.min.css" rel="stylesheet" type="text/css" />
-  
+    
+    @yield('css_block')
 
 
     <style>
@@ -46,7 +41,7 @@
         <div class="leftside-header">
             <div class="logo">
                 <a href="{{ url('/dashboard') }}" class="on-click">
-                    <img alt="logo" src="{{ asset('public/img/logo.png') }}" />
+                    &nbsp;<img alt="logo" src="{{ asset('public/img/logo.png') }}" />
                 </a>
             </div>
             <div id="menu-toggle" class="visible-xs toggle-left-sidebar" data-toggle-class="left-sidebar-open" data-target="html">
@@ -104,7 +99,7 @@
 
                 ?>
 
-                <div class="notice" id="alerts-notice">
+                <!--<div class="notice" id="alerts-notice">
                     @if(Auth::user()->role == 1)
                         <i class="fa fa-bell-o" aria-hidden="true"><span class="badge badge-xs badge-top-right x-danger">0</span></i>
                     @else
@@ -121,21 +116,13 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>-->
                 <div class="header-separator"></div>
             </div>
             <div class="header-section" id="user-headerbox">
                 <div class="user-header-wrap">
                     <div class="user-photo">
-                        @if(Auth::user()->role == 9)
-							<?php 
-								$courier = findCourierDetails(Auth::user()->id);
-								$image = $courier[0]->picture;
-							?>
-							<img src="http://www.nrbxpress.com/uploads/images/pictures/{{$image}}" alt="{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}" />
-						@else 
-							<img src="http://www.nrbxpress.com/uploads/images/pictures/{{Auth::user()->image}}" alt="{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}" />
-						@endif
+                        <img src="http://www.nrbxpress.com/uploads/images/pictures/no_image.png" alt="{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}" />
                     </div>
                     <div class="user-info">
                         @if(Auth::user()->role == 9)
@@ -145,6 +132,10 @@
                         @endif
                         @if(Auth::user()->role == 1)
                             <span class="user-profile">Admin</span>
+                        @elseif(Auth::user()->role == 2)
+                            <span class="user-profile">Editor</span>
+                        @elseif(Auth::user()->role == 3)
+                            <span class="user-profile">Reporter</span>
                         @endif
                     </div>
                     <i class="fa fa-plus icon-open" aria-hidden="true"></i>
@@ -189,22 +180,22 @@
                             <li class="active-item"><a href="{{ url('/dashboard') }}"><i class="fa fa-home" aria-hidden="true"></i><span>Dashboard</span></a></li>
                             <!--UI ELEMENTENTS-->
                             @if(Auth::user()->role == 1 )
-                                <li class=" has-child-item close-item" style="{{ $user_class }}">
+                                <li class=" has-child-item close-item">
                                     <a>
-                                        <i class="fa fa-sitemap" aria-hidden="true"></i>
+                                        <i class="fa fa-users" aria-hidden="true"></i>
                                         <span>Users</span>
                                     </a>
                                     <ul class="nav child-nav level-1">
                                         <li><a href="{{ url('dashboard/employees/list') }}">Employees List</a></li>
                                     </ul>
                                 </li>
-                                <li class=" has-child-item close-item" style="{{ $user_class }}">
+                                <li class=" has-child-item close-item">
                                     <a>
                                         <i class="fa fa-sitemap" aria-hidden="true"></i>
                                         <span>Categories</span>
                                     </a>
                                     <ul class="nav child-nav level-1">
-                                        <li><a href="{{ url('dashboard/categories/list') }}">Categories List</a></li>
+                                        <li><a href="{{ url('categories/list') }}">Categories List</a></li>
                                     </ul>
                                 </li>
                             @endif
@@ -215,6 +206,28 @@
                                 </a>
                                 <ul class="nav child-nav level-1">
                                     <li><a href="{{ url('news/list') }}">News List</a></li>
+                                </ul>
+                            </li>
+                            @if(Auth::user()->role ==1)
+								<li class=" has-child-item close-item">
+									<a>
+										<i class="fa fa-book" aria-hidden="true"></i>
+										<span>Comments</span>
+									</a>
+									<ul class="nav child-nav level-1">
+										<li><a href="{{ url('comments/list') }}">Comments List</a></li>
+									</ul>
+								</li>
+							@endif
+                            <li class=" has-child-item close-item">
+                                <a>
+                                    <i class="fa fa-cog" aria-hidden="true"></i>
+                                    <span>Settings</span>
+                                </a>
+                                <ul class="nav child-nav level-1">
+                                    <li><a href="{{ url('view/employees/'.Auth::user()->id) }}">Profile</a></li>
+                                    <li><a href="{{ url('password/change/'.Auth::user()->id) }}">Change Password</a></li>
+                                    <li><a href="{{ url('logout') }}">Logout</a></li>
                                 </ul>
                             </li>
                         </ul>
@@ -253,26 +266,19 @@
     </div>
 </div>
 <script src="{{ asset('public/js/all.js') }}" type="text/javascript"></script>
-{{--<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>--}}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 <script src="{{ asset('public/js/toaster.min.js') }}" type="text/javascript"></script>
 <script src="{{ asset('public/plugins/angular/angular.min.js') }}" type="text/javascript"></script>
 <script src="{{ asset('public/js/controller.js') }}" type="text/javascript"></script>
-<script src="{{ asset('public/js/datetimepicker.js') }}" type="text/javascript"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js" type="text/javascript"></script>
- <!-- Include external JS libs. -->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/codemirror.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/mode/xml/xml.min.js"></script>
- 
-    <!-- Include Editor JS files. -->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.6.0/js/froala_editor.pkgd.min.js"></script>
- 
-{{--<script src="{{ asset('public/plugins/select2/js/select2.full.min.js') }}" type="text/javascript"></script>--}}
-<script src="{{ asset('public/plugins/bootstrap-fileinput/js/fileinput.min.js') }}" type="text/javascript"></script>
-{{--<script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>--}}
+<!--<script src="{{ asset('public/js/datetimepicker.js') }}" type="text/javascript"></script>-->
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js" type="text/javascript"></script>-->
 
+@yield('js_block')
 <script>
 $(document).ready(function()  {
+	if($('.news_details').length > 0)
+	{
+		CKEDITOR.replace( 'news_details' );
+	}
 /*
     $('.default_datetimepicker').datetimepicker();*/
 
@@ -302,7 +308,7 @@ $(document).ready(function()  {
             console.log(result)
         });
     });
-    $('#same_add_chk').click(function(){
+    /*$('#same_add_chk').click(function(){
         var present_address = $('#present_address').val();
         if($('#same_add_chk').prop('checked'))
         {
@@ -312,25 +318,29 @@ $(document).ready(function()  {
         {
             $('#permanent_address').val('');
         }
-    });
-	$.FroalaEditor.DefineIcon('imageInfo', {NAME: 'info'});
-	$.FroalaEditor.RegisterCommand('imageInfo', {
-	  title: 'Info',
-	  focus: false,
-	  undo: false,
-	  refreshAfterCallback: false,
-	  callback: function () {
-		var $img = this.image.get();
-		alert($img.attr('src'));
-	  }
-	});	
-	$('textarea').froalaEditor({
-      // Set dark theme name.
-      theme: 'dark',
-      zIndex: 2003,
-	  imageEditButtons: ['imageDisplay', 'imageAlign', 'imageInfo', 'imageRemove']
-    })
-    $('#sender_input').change(function(){console.log('dd')
+    });*/
+	/* if($.FroalaEditor)
+	{
+		$.FroalaEditor.DefineIcon('imageInfo', {NAME: 'info'});
+		$.FroalaEditor.RegisterCommand('imageInfo', {
+		  title: 'Info',
+		  focus: false,
+		  undo: false,
+		  refreshAfterCallback: false,
+		  callback: function () {
+			var $img = this.image.get();
+			alert($img.attr('src'));
+		  }
+		});	
+		$('textarea').froalaEditor({
+		  // Set dark theme name.
+		  theme: 'dark',
+		  zIndex: 2003,
+		  imageEditButtons: ['imageDisplay', 'imageAlign', 'imageInfo', 'imageRemove']
+		})
+	} */
+	
+    /*$('#sender_input').change(function(){console.log('dd')
         formData = new FormData($("#userRegistrationForm")[0]);
         $.ajax({
             url: "{{ url('filterSearchOrder') }}",
@@ -346,8 +356,11 @@ $(document).ready(function()  {
         }).fail(function(result){
             console.log(result)
         });
-    });
+    });*/
 	$('.savePostBtn').click(function(){
+		for ( instance in CKEDITOR.instances )
+			CKEDITOR.instances[instance].updateElement();
+
 		var flag = $(this).attr('flag');
 		$('#flag').val(flag);
 		console.log(222222);
@@ -362,6 +375,7 @@ $(document).ready(function()  {
             cache: false,
             processData:false,
             success: function(result){
+				console.log(result)
                 toastr.warning('News has been created successfully!', 'Notification')
                 toastr.options.closeButton = true;
                 window.location.href = app.host + 'news/list';
@@ -369,8 +383,30 @@ $(document).ready(function()  {
         }).fail(function(result){
             console.log(result)
         });
-	});
+	}); 
+	$('.saveCatBtn').click(function(){
+		formData = new FormData($("#addCatForm")[0]);
+		console.log(formData)
+        $.ajax({
+            url: "{{ url('categories/add') }}",
+            method: "POST",
+            data: formData,
+            contentType: false,
+            cache: false,
+            processData:false,
+            success: function(result){
+                toastr.warning('Category has been created successfully!', 'Notification')
+                toastr.options.closeButton = true;
+                window.location.href = app.host + 'categories/list';
+            }
+        }).fail(function(result){
+            console.log(result)
+        });
+	}); 	
 	$('#updateNewsBtn').click(function(){
+		for ( instance in CKEDITOR.instances )
+			CKEDITOR.instances[instance].updateElement();
+
 		var news_id = $('#updateNewsBtn').attr('news_id');
 		formData = new FormData($("#editNewsForm")[0]);
 		console.log(formData)
@@ -391,7 +427,7 @@ $(document).ready(function()  {
             console.log(result)
         });
 	});
-    $('#generate_deposit_btn').click(function(){
+    /*$('#generate_deposit_btn').click(function(){
 		$('#ajax_loading').css('display','block');
         formData = new FormData($("#myform")[0]);
         $.ajax({
@@ -576,9 +612,9 @@ $(document).ready(function()  {
         var last_name = $('#last_name').val();
         if(first_name == "" || last_name == "")
         {
-            /*$('#first_name').addClass('error_class');
+            $('#first_name').addClass('error_class');
              $('#last_name').addClass('error_class');
-             $('#err_msg').css('display', 'block');*/
+             $('#err_msg').css('display', 'block');
             toastr.warning('Form is incomplete!', 'Notification')
             $('#ajax_loading').css('display', 'none');
             toastr.options.closeButton = true;
@@ -612,9 +648,9 @@ $(document).ready(function()  {
         }).fail(function(result){
             console.log(result)
         });
-    });
+    });*/
 
-    $('#change_courier_status').click(function(){
+    /*$('#change_courier_status').click(function(){
         var status = $('#change_courier_status').attr('status');
         var courier_id = $('#change_courier_status').attr('courier_id');
 
@@ -655,9 +691,9 @@ $(document).ready(function()  {
         var courier_id = $('#id').val();
         if(first_name == "" || last_name == "")
         {
-            /*$('#first_name').addClass('error_class');
+            $('#first_name').addClass('error_class');
              $('#last_name').addClass('error_class');
-             $('#err_msg').css('display', 'block');*/
+             $('#err_msg').css('display', 'block');
             toastr.warning('Form is incomplete!', 'Notification')
             toastr.options.closeButton = true;
             return false;
@@ -691,13 +727,13 @@ $(document).ready(function()  {
     $('#search_order_btn').click(function(){
         var order_status = $('#order_status').val();
         var order_id = $('#order_id').val();
-        var from_date = $('#from_date').val();/* 
+        var from_date = $('#from_date').val();
         if($('#from_date').val() == "" || $('#to_date').val() == "")
         {
             $('#from_date').css('border', '1px red solid');
             $('#to_date').css('border', '1px red solid');
             return false;
-        } */
+        } 
 		
         //2017/05/03 11:00
         
@@ -825,7 +861,7 @@ $(document).ready(function()  {
         }).fail(function (result) {
             console.log(result)
         });
-    });
+    });*/
     $('#edit_user').click(function(){
         formData = new FormData($("#userDetails")[0]);
         $.ajax({
@@ -848,7 +884,7 @@ $(document).ready(function()  {
             $("#failure_div").delay(3000).fadeOut('slow');
         });
     });
-    $('#doc_item_input').change(function(){
+    /*$('#doc_item_input').change(function(){
         item_id = $('#doc_item_input').val();
         if(item_id == 'Your document description')
         {
@@ -858,7 +894,7 @@ $(document).ready(function()  {
         {
             $('#other_div').css('display', 'none');
         }
-    })
+    })*/
     /*$.fn.editable.defaults.mode = 'inline';
     $.fn.editable.defaults.params = function (params) {
         params._token = $("meta[name=token]").attr("content");
@@ -890,7 +926,7 @@ $(document).ready(function()  {
         value: 2,
         source: user_result,
     });*/
-    $('#sender_district').change(function(){
+    /*$('#sender_district').change(function(){
         var sender_district = $('#sender_district').val();
 
         if(sender_district != 0)
@@ -977,7 +1013,7 @@ $(document).ready(function()  {
                 console.log(result)
             });
         }
-    });
+    });*/
 
     /* $('.responsive-table').DataTable({
         "order": [[ 0, "desc" ]]
@@ -992,16 +1028,28 @@ $(document).ready(function()  {
             $('#end_date').prop('disabled', false);
         }
     })
-    $('.select2js').select2();
+    if($('.select2js').length > 0)
+	{
+		$('.select2js').select2();
+	}
+    if($('.select2-tags').length > 0)
+	{
+		$('.select2-tags').select2({
+			placeholder: "Tag the news...",
+			allowClear: true,
+			tags: true,
+			tokenSeparators: [',']
+		});
+	}
 
-    $('.default_datetimepicker').datetimepicker({
+    /*$('.default_datetimepicker').datetimepicker({
         allowTimes: ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00'],
     });
     $('.default_datetimepicker_without_time').datetimepicker({
         timepicker:false,
         format: 'Y/m/d'
-    });
-            $(this).change(function(){
+    });*/
+            /*$(this).change(function(){
         date = new Date($(this).val());
         day = date.getDate();
         month = date.getMonth()+1;
@@ -1015,8 +1063,11 @@ $(document).ready(function()  {
             day = "0"+day;
         }
         $(this).val(year + "-" + month + "-" + day);
-    });
-    $(".fileinput").fileinput({'showUpload':false, 'previewFileType':'any'});
+    });*/
+	if($(".fileinput").length > 0)
+	{
+		$(".fileinput").fileinput({'showUpload':false, 'previewFileType':'any'});
+	}
 
 })
 /* tooltip*/

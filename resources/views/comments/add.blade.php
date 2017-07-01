@@ -77,7 +77,7 @@
 							  <div class="form-group">
 								  <label for="password3" class="col-sm-3 control-label">Details</label>
 								  <div class="col-sm-9">
-									  <textarea id="news_details" class="news_details" name="news_details" style="height: 300px"></textarea>
+									  <textarea id="news_details" name="news_details" style="height: 300px"></textarea>
 								  </div>
 							  </div>
 							  

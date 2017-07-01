@@ -1,5 +1,11 @@
 @extends('layouts.admin.dashboard')
+@section('css_block')
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+@endsection
 
+@section('js_block')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+@endsection
 @section('content')
 <div class="row">
   <div class="col-md-12 success_div" style="display: none;">
@@ -13,7 +19,7 @@
   
   @elseif($user_type == 'employees')
   
-  Add Employee
+  ADD EMPLOYEE
   
   @endif </button>
   <div class="panel">
@@ -25,50 +31,32 @@
         <thead>
         
           <th>Name</th>
-         
           <th>Email Address </th>
-          @if($user_type == 'clients')
-          <th>Phone</th>
-          <th>Account Type</th>
-          <th>Region</th>
-          @endif
-          
-          @if($user_type == 'employees')
+          <th>Categories </th>
           <th>Role</th>
-          @endif
           <th class="text-right">Acttion</th>
             </thead>
         <tbody>
         
         @foreach($users as $user)
-        <tr> @if($user_type == 'clients')
-          <td>{{ $user->name }}</td>
-          @else
+        <tr> 
           <td>{{ $user->first_name }} {{ $user->last_name }}</td>
-          @endif
-          
           <td>{{ $user->email }}</td>
-          @if($user_type == 'clients')
-          <td>{{ $user->phone }}</td>
-          
-          @endif
-          @if($user_type == 'clients')
-          
-          @if($user->account_type == 1)
-          <td>Individual</td>
-          @elseif($user->account_type == 2)
-          <td>Corporate</td>
-          @elseif($user->account_type == 3)
-          <td>Government</td>
-          
-          @endif
-          @if($user_type == 'clients')
-          <td>{{ $user->region }}</td>
-          
-          @endif
-          @else
-          <td>{{ $user->role_name }}</td>
-          @endif
+          <td>{{ $user->email }}</td>
+          <td>
+			<?php 
+				$user_categories = findUserCategories($user->id);
+				
+				$str = "";
+				foreach($user_categories as $cat)
+				{
+					$str = $str."<code>$cat->category_name</code><br>";
+				}
+				echo substr($str, 0, -1);
+				if(strlen($str) == 0)
+					echo "<code>Not Categorized</code>";
+			?>
+		  </td>
           <td class="text-right">
           	<a href="{{ url('view/'.$user_type .'/'.$user->id) }}" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-eye"></i></a> 
             @if(Auth::user()->role == 1) <a href="{{ url('edit/'.$user_type .'/'.$user->id) }}" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil"></i></a> @endif 
@@ -155,7 +143,7 @@
                 <div class="col-sm-6">
                   <div class="form-group form-group-default">
                     <label>Role <span style="color:red">*</span></label>
-                    <select class="form-control" name="role" ng-model="user.role" ng-required="true">
+                    <select class="form-control select2js" style="width: 100%" name="role" ng-model="user.role" ng-required="true">
                       <option value="">Chose Options</option>
                       <option ng-repeat="role in roles" value="[[ role.id ]]">[[ role.name ]]</option>
                     </select>
@@ -171,7 +159,7 @@
                 <div class="col-sm-12">
                   <div class="form-group form-group-default">
                     <label>Permissions <span style="color:red">*</span></label>
-                    <select class="form-control select2js" style="width: 100%" name="permissions[]" multiple id="orders">
+                    <select class="form-control select2js" style="width: 100%" name="permissions[]" multiple>
                       @foreach($permissions as $permission)
                         <option value="{{ $permission->id }}">{{ $permission->category_name }}</option>
                       @endforeach
