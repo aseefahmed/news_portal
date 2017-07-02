@@ -192,6 +192,10 @@ function findNewsCategories($news_id)
 {
 	return DB::table('news_types')->join('cms_categories', 'cms_categories.id', '=', 'category_id')->where('news_id', $news_id)->select('cms_categories.category_name')->get();
 }
+function findNewsTags($news_id)
+{
+	return DB::table('tags')->where('news_id', $news_id)->select('tags.tag_name')->get();
+}
 function findUserDetails($user_id)
 {
 	return DB::table('users')->where('id', $user_id)->get();

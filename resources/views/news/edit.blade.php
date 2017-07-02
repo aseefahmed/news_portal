@@ -10,13 +10,9 @@
 
 @section('js_block')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
-<<<<<<< HEAD
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.6.0/js/froala_editor.pkgd.min.js"></script>
-    <script src="{{ asset('public/plugins/bootstrap-fileinput/js/fileinput.min.js') }}" type="text/javascript"></script>
-=======
-    <script src="//cdn.ckeditor.com/4.7.1/standard/ckeditor.js"></script>
+	<script src="//cdn.ckeditor.com/4.7.1/standard/ckeditor.js"></script>
 	<script src="{{ asset('public/plugins/bootstrap-fileinput/js/fileinput.min.js') }}" type="text/javascript"></script>
->>>>>>> f84b0079079260576376c5c4d2040995f5304969
+
 @endsection
 
 @section('content')
@@ -56,9 +52,14 @@
 							  </div>
 							    <?php 
 									$cat_arr = array();
+									$tag_arr = array();
 									foreach(findNewsCategories($news[0]->id) as $cat)
 									{
 										array_push($cat_arr, $cat->category_name);
+									}
+									foreach(findNewsTags($news[0]->id) as $tag)
+									{
+										array_push($tag_arr, $tag->tag_name);
 									}
 								?>
 							  <div class="form-group">
@@ -67,6 +68,16 @@
 										<select <?php if(Auth::user()->role == 2){echo "disabled";} ?> class="form-control select2js" style="width: 100%" name="categories[]" id="categories" multiple>
 										  @foreach($categories as $category)
 											<option value="{{ $category->id }}" <?php if(in_array($category->category_name, $cat_arr)){echo "selected";} ?>>{{ $category->category_name }}</option>
+										  @endforeach
+										</select>
+								  </div>
+							  </div>
+							  <div class="form-group">
+								  <label for="username" class="col-sm-3 control-label">Tags</label>
+								  <div class="col-sm-9">
+										<select <?php if(Auth::user()->role == 2){echo "disabled";} ?> class="form-control select2-tags" style="width: 100%" name="tags[]" id="categories" multiple>
+										  @foreach($tags as $tag)
+											<option value="{{ $tag->tag_name }}" <?php if(in_array($tag->tag_name, $tag_arr)){echo "selected";} ?>>{{ $tag->tag_name }}</option>
 										  @endforeach
 										</select>
 								  </div>
@@ -103,6 +114,9 @@
 								  <label for="password3" class="col-sm-3 control-label">&nbsp;</label>
 								  <div class="col-sm-9">
 									<a class="btn btn-success" id="updateNewsBtn" news_id="{{ $news[0]->id }}">Update</a>
+								<img src="{{ asset('public/images/pie.gif') }}" height="30px" id="ajax_loading" style="display: none;">
+									
+								
 								  </div>
 							  </div>
 							  

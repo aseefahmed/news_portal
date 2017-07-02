@@ -50,18 +50,13 @@
 							  <div class="form-group">
 								  <label for="username" class="col-sm-3 control-label">Tags</label>
 								  <div class="col-sm-9">
-										<select name="country" class="form-control select2-tags" multiple="multiple" style="width: 100%">
-											<optgroup label="AMERICA">
-												<option value="DM" label="Dominica">Dominica</option>
-												<option value="VC" label="Saint Vincent and the Grenadines">Saint Vincent and the Grenadines</option>
-												<option value="SR" label="Suriname">Suriname</option>
-												<option value="TT" label="Trinidad and Tobago">Trinidad and Tobago</option>
-												<option value="TC" label="Turks and Caicos Islands">Turks and Caicos Islands</option>
-												<option value="VI" label="U.S. Virgin Islands">U.S. Virgin Islands</option>
-												<option value="US" label="United States">United States</option>
-												<option value="UY" label="Uruguay">Uruguay</option>
-												<option value="VE" label="Venezuela">Venezuela</option>
-											</optgroup>
+										<select name="tags[]" class="form-control select2-tags" multiple="multiple" style="width: 100%">
+											
+											@foreach($tags as $tag)
+												<option value="{{ $tag->tag_name }}">{{ $tag->tag_name }} </option>
+											@endforeach
+												
+											
 										</select>
 								  </div>
 							  </div>
@@ -109,6 +104,7 @@
 						<div class="col-sm-12" style="margin-top:15px">
 								<a class="btn btn-primary savePostBtn" flag="0">Save as Draft</a>
 								<a class="btn btn-success savePostBtn" flag="1">Publish</a>
+								<img src="{{ asset('public/images/pie.gif') }}" height="30px" id="ajax_loading" style="display: none;">
 						</div>
 						
 

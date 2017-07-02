@@ -22,10 +22,7 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('news/edit/{id}', ['as' => 'news', 'uses' => 'NewsController@editNews']);
     Route::post('news/edit/{id}', ['as' => 'news', 'uses' => 'NewsController@editNewsSubmit']);
     Route::get('news/remove/{id}', ['as' => 'news', 'uses' => 'NewsController@removeNews']);
-<<<<<<< HEAD
-=======
     Route::get('comments/remove/{id}/{flag}', ['as' => 'news', 'uses' => 'CommentsController@removeComment']);
->>>>>>> f84b0079079260576376c5c4d2040995f5304969
     Route::get('categories/list', ['as' => 'news', 'uses' => 'CategoriesController@index']);
     Route::get('categories/add', ['as' => 'news', 'uses' => 'CategoriesController@addCategories']);
     Route::post('categories/add', ['as' => 'news', 'uses' => 'CategoriesController@submitCategories']);

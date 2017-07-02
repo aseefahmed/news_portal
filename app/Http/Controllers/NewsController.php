@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\News;
+use App\Tag;
 use App\NewsType;
 
 use App\Http\Requests;
@@ -39,11 +40,12 @@ class NewsController extends Controller
     public function addNews()
     {
 		$data['categories'] = DB::table('cms_categories')->get();
+		$data['tags'] = DB::table('tags')->distinct()->get(['tag_name']);
     	return view('news.add', $data);
     }
 	
 	public function submitNews(Request $request)
-	{
+	{	
 		$news = new News();
 		$news->id = time();
 		$news->title = $request->news_title;
@@ -71,6 +73,16 @@ class NewsController extends Controller
 				$news_types->save();
 			}
 		}
+		if(count($request->tags) > 0 )
+		{
+			foreach($request->tags as $tag)
+			{
+				$tags = new Tag();
+				$tags->tag_name = $tag;
+				$tags->news_id = $news->id;
+				$tags->save();
+			}
+		}
 	}
 	
 	public function viewNews($id)
@@ -88,6 +100,7 @@ class NewsController extends Controller
 	{
 		$data['news'] = DB::table('news')->where('id', $id)->get();
 		$data['categories'] = DB::table('cms_categories')->get();
+		$data['tags'] = DB::table('tags')->distinct()->get(['tag_name']);
 		return view('news.edit', $data);
 	}
 	
@@ -107,6 +120,7 @@ class NewsController extends Controller
         }
 		$news->save();
 		DB::table('news_types')->where('news_id', $request->id)->delete();
+		DB::table('tags')->where('news_id', $request->id)->delete();
 		if(count($request->categories) > 0 )
 		{
 			foreach($request->categories as $category)
@@ -115,6 +129,17 @@ class NewsController extends Controller
 				$news_types->news_id = $news->id;
 				$news_types->category_id = $category;
 				$news_types->save();
+			}
+		}
+		
+		if(count($request->tags) > 0 )
+		{
+			foreach($request->tags as $tag)
+			{
+				$tags = new Tag();
+				$tags->tag_name = $tag;
+				$tags->news_id = $news->id;
+				$tags->save();
 			}
 		}
 		

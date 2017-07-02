@@ -321,11 +321,10 @@ $(document).ready(function()  {
             $('#permanent_address').val('');
         }
     });*/
-<<<<<<< HEAD
-	if($.FroalaEditor)
-=======
+
+
 	/* if($.FroalaEditor)
->>>>>>> f84b0079079260576376c5c4d2040995f5304969
+
 	{
 		$.FroalaEditor.DefineIcon('imageInfo', {NAME: 'info'});
 		$.FroalaEditor.RegisterCommand('imageInfo', {
@@ -344,11 +343,8 @@ $(document).ready(function()  {
 		  zIndex: 2003,
 		  imageEditButtons: ['imageDisplay', 'imageAlign', 'imageInfo', 'imageRemove']
 		})
-<<<<<<< HEAD
-	}
-=======
+
 	} */
->>>>>>> f84b0079079260576376c5c4d2040995f5304969
 	
     /*$('#sender_input').change(function(){console.log('dd')
         formData = new FormData($("#userRegistrationForm")[0]);
@@ -368,6 +364,8 @@ $(document).ready(function()  {
         });
     });*/
 	$('.savePostBtn').click(function(){
+		$('.savePostBtn').attr('disabled', 'disabled');
+		$('#ajax_loading').css('display', 'inline');
 		for ( instance in CKEDITOR.instances )
 			CKEDITOR.instances[instance].updateElement();
 
@@ -386,6 +384,8 @@ $(document).ready(function()  {
             processData:false,
             success: function(result){
 				console.log(result)
+				
+				$('#ajax_loading').css('display', 'block');
                 toastr.warning('News has been created successfully!', 'Notification')
                 toastr.options.closeButton = true;
                 window.location.href = app.host + 'news/list';
@@ -417,6 +417,8 @@ $(document).ready(function()  {
 		for ( instance in CKEDITOR.instances )
 			CKEDITOR.instances[instance].updateElement();
 
+		$('#updateNewsBtn').attr('disabled', 'disabled');
+		$('#ajax_loading').css('display', 'inline');
 		var news_id = $('#updateNewsBtn').attr('news_id');
 		formData = new FormData($("#editNewsForm")[0]);
 		console.log(formData)
@@ -428,7 +430,9 @@ $(document).ready(function()  {
             cache: false,
             processData:false,
             success: function(result){
-				console.log(result)
+				console.log(result);
+				
+				$('#ajax_loading').css('display', 'inline');
                 toastr.warning('News has been created successfully!', 'Notification')
                 toastr.options.closeButton = true;
                 window.location.href = app.host + 'news/list';
@@ -1042,8 +1046,7 @@ $(document).ready(function()  {
 	{
 		$('.select2js').select2();
 	}
-<<<<<<< HEAD
-=======
+
     if($('.select2-tags').length > 0)
 	{
 		$('.select2-tags').select2({
@@ -1053,7 +1056,6 @@ $(document).ready(function()  {
 			tokenSeparators: [',']
 		});
 	}
->>>>>>> f84b0079079260576376c5c4d2040995f5304969
 
     /*$('.default_datetimepicker').datetimepicker({
         allowTimes: ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00'],

@@ -54,6 +54,21 @@
 									?>
 								  </div>
 							  </div>
+							  <div class="form-group">
+								  <label for="name" class="col-sm-3 control-label">Tags</label>
+								  <div class="col-sm-9">
+									<?php 
+										$str = "";
+										foreach(findNewsTags($news[0]->id) as $cat)
+										{
+											$str = $str."<code>$cat->tag_name</code>/";
+										}
+										echo substr($str, 0, -1);
+										if(strlen($str) == 0)
+											echo "<code>Not Tagged</code>";
+									?>
+								  </div>
+							  </div>
 							  
 							  <div class="form-group">
 								  <label for="name" class="col-sm-3 control-label">Language</label>
