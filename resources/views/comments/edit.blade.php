@@ -10,13 +10,8 @@
 
 @section('js_block')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
-<<<<<<< HEAD
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.6.0/js/froala_editor.pkgd.min.js"></script>
-    <script src="{{ asset('public/plugins/bootstrap-fileinput/js/fileinput.min.js') }}" type="text/javascript"></script>
-=======
     <script src="//cdn.ckeditor.com/4.7.1/standard/ckeditor.js"></script>
 	<script src="{{ asset('public/plugins/bootstrap-fileinput/js/fileinput.min.js') }}" type="text/javascript"></script>
->>>>>>> f84b0079079260576376c5c4d2040995f5304969
 @endsection
 
 @section('content')
@@ -96,7 +91,7 @@
 							  <div class="form-group">
 								  <label for="password3" class="col-sm-3 control-label">Details</label>
 								  <div class="col-sm-9">
-									<textarea id="news_details" class="news_details" name="news_details" style="height: 300px">{{ $news[0]->details }}</textarea>
+									<textarea id="news_details" name="news_details" style="height: 300px">{{ $news[0]->details }}</textarea>
 								  </div>
 							  </div>
 							  <div class="form-group">

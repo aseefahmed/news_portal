@@ -70,6 +70,20 @@ angular.module('myApp').controller('NewsController', function($scope, $http, $wi
             window.location.href = app.host + 'news/list';
         })
 	}
+	
+	$scope.changeCommentStatus = function(id, flag){
+		$scope.comment_id = id;
+		$scope.flag = flag;
+		$('#modalSlideUp2').modal('show')
+	}
+	
+	$scope.confirmRemoveComment = function(){
+		$http.get(app.host + 'comments/remove/'+$scope.comment_id+'/'+$scope.flag).then(function(response){
+            toastr.success('Comment has been removed successfully.', 'Notification')
+            toastr.options.closeButton = true;
+            window.location.href = app.host + 'comments/list';
+        })
+	}
 });
 
 angular.module('myApp').controller('ClientController', function($scope, $http, $window) {

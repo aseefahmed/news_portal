@@ -13,7 +13,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
     <script src="//cdn.ckeditor.com/4.7.1/standard/ckeditor.js"></script>
 	<script src="{{ asset('public/plugins/bootstrap-fileinput/js/fileinput.min.js') }}" type="text/javascript"></script>
-
 @endsection
 
 @section('content')
@@ -78,7 +77,7 @@
 							  <div class="form-group">
 								  <label for="password3" class="col-sm-3 control-label">Details</label>
 								  <div class="col-sm-9">
-									  <textarea id="news_details" class="news_details" name="news_details" style="height: 300px"></textarea>
+									  <textarea id="news_details" name="news_details" style="height: 300px"></textarea>
 								  </div>
 							  </div>
 							  
