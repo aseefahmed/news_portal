@@ -16,11 +16,22 @@ class NewsController extends Controller
     {
     	if(Auth::user()->role == 1)
     	{
-    			$data['news_list'] = DB::table('news')->get();
+    			$data['news_list'] = DB::table('news')->paginate(10);
+    	}
+    	else if(Auth::user()->role == 2)
+    	{
+				$my_catagories = DB::table('permission_users')->join('cms_categories', 'cms_categories.id', '=', 'permission_users.category_id')->where('user_id', Auth::user()->id)->select('cms_categories.id')->get();
+    			
+				$cat_arr = array();
+				foreach($my_catagories as $cat)
+				{
+					array_push($cat_arr, $cat->id);
+				}
+				$data['news_list'] = DB::table('news')->join('news_types', 'news_types.news_id', '=', 'news.id')->whereIn('news_types.category_id', $cat_arr)->select('news.*')->paginate(10);
     	}
     	else if(Auth::user()->role == 3)
     	{
-    			$data['news_list'] = DB::table('news')->where('created_by', Auth::user()->id)->get();
+    			$data['news_list'] = DB::table('news')->where('created_by', Auth::user()->id)->paginate(10);
     	}
     	return view('news.index', $data);
     }
@@ -95,6 +106,7 @@ class NewsController extends Controller
             $news->featured_image = $file_name;
         }
 		$news->save();
+		DB::table('news_types')->where('news_id', $request->id)->delete();
 		if(count($request->categories) > 0 )
 		{
 			foreach($request->categories as $category)

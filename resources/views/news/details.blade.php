@@ -18,6 +18,28 @@
 								  </div>
 							  </div>
 							  <div class="form-group">
+								  <label for="name" class="col-sm-3 control-label">Status</label>
+								  <div class="col-sm-9">
+								  @if($news[0]->flag == 0)
+										<span class="badge x-warning">Draft</span>
+									@elseif($news[0]->flag == 1)
+										<span class="badge x-info">Published</span>
+									@endif
+								  </div>
+							  </div>
+							  <div class="form-group">
+								  <label for="name" class="col-sm-3 control-label">Created At</label>
+								  <div class="col-sm-9">
+								  {{ date_format(date_create($news[0]->created_at), 'g:s A, dS M, Y') }}
+								  </div>
+							  </div>
+							  <div class="form-group">
+								  <label for="name" class="col-sm-3 control-label">Last Modified At</label>
+								  <div class="col-sm-9">
+								  {{ date_format(date_create($news[0]->updated_at), 'g:s A, dS M, Y') }}
+								  </div>
+							  </div>
+							  <div class="form-group">
 								  <label for="name" class="col-sm-3 control-label">Categories</label>
 								  <div class="col-sm-9">
 									<?php 
@@ -27,6 +49,8 @@
 											$str = $str."<code>$cat->category_name</code>/";
 										}
 										echo substr($str, 0, -1);
+										if(strlen($str) == 0)
+											echo "<code>Not Categorized</code>";
 									?>
 								  </div>
 							  </div>
@@ -54,14 +78,14 @@
 			</div>
 		</div>
 		<div class="col-sm-12 col-md-4">
-			<h4 class="section-subtitle">&nbsp;</h4>
+			<a class="btn btn-success btn-block" href="{{ url('news/edit/'.$news[0]->id) }}">Modify This News</a>
 			<div class="panel b-primary bt-sm ">
                 <div class="panel-header">
                     <h5 class="panel-title">Featured Image</h5>
                 </div>
-                <div class="panel-content text-center" style="height:300px">
+                <div class="panel-content text-center" style="height:300px;">
                  
-                    <img class="img1 text-center" src="{{ asset('public/images/news/featured/'.$news[0]->featured_image) }}" height="250px;">
+                            <img class="img1 text-center col-md-12" src="{{ asset('public/images/news/featured/'.$news[0]->featured_image) }}" height="250px;">
                        
                 </div>
             </div>

@@ -115,7 +115,8 @@ angular.module('myApp').controller('ClientController', function($scope, $http, $
         user_id = $('#delete_user_confirm_btn').attr('user_id');
         user_type = $('#delete_user_confirm_btn').attr('user_type');
         $http.get(app.host + 'deleteUser/'+user_type+'/'+user_id).then(function(response){
-            console.log(response)
+            toastr.success('User has been successfully removed from the system!', 'Notification')
+            toastr.options.closeButton = true;
             $('#success-modal_2').modal('toggle')
             window.location.href = app.host + 'dashboard/'+user_type+'/list';
         })

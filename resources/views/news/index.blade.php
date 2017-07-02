@@ -2,13 +2,16 @@
 @section('content')
 <div class="pull-left" style="padding-left:15px;">
   <div class="col-xs-12">
-    <a class="btn btn-wide btn-success" href="{{ url('news/add') }}">ADD News</a>
+    <a class="btn btn-wide btn-success" href="{{ url('news/add') }}">ADD NEWS</a>
   </div>
 </div>
 <div class="col-sm-12" ng-controller="NewsController">
   <div class="container-fluid padding-25 sm-padding-10">
     <div class="panel panel-transparent clearfix">
       <div class="panel-body  table-responsive">
+        <div class="col-md-12 text-center">
+            {{ $news_list->links() }}
+        </div>
         <table class="table table-striped responsive-table" id="responsive-table">
           <thead>
             <tr>
@@ -22,19 +25,24 @@
             </tr>
           </thead>
           <tbody>
-          
+          @if(count($news_list) == 0)
+			  <td>No data available.</td>
+		  @endif
+		  
           @foreach($news_list as $news)
           <tr>
             <td width="8%"><img src="{{ asset('public/images/news/featured/'.$news->featured_image)}}" height="40px"></td>
-            <td>{{ $news->title }}</td>
+            <td><?php echo wordwrap($news->title,80,"<br>\n");?></td>
             <td>
 				<?php 
 					$str = "";
 					foreach(findNewsCategories($news->id) as $cat)
 					{
-						$str = $str."<code>$cat->category_name</code>/";
+						$str = $str."<code>$cat->category_name</code><br>";
 					}
 					echo substr($str, 0, -1);
+					if(strlen($str) == 0)
+						echo "<code>Not Categorized</code>";
 				?>
 			</td>
             <td>{{ findUserDetails($news->created_by)[0]->first_name }} {{ findUserDetails($news->created_by)[0]->last_name }}</td>
@@ -56,6 +64,9 @@
             </tbody>
           
         </table>
+        <div class="col-md-12 text-center">
+            {{ $news_list->links() }}
+        </div>
       </div>
     </div>
 	<div class="modal fade" id="modalSlideUp2" tabindex="-1" role="dialog" aria-labelledby="modal-success-label" data-keyboard="false" data-backdrop="static">
